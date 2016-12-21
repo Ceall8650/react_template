@@ -21,7 +21,23 @@ module.exports = {
 				test: /\.js$/,
 				loaders: ['react-hot','babel-loader'],
 				include: path.join(__dirname, 'src')
-			}
+			},
+			{
+				test: /\.css$/,
+				loader: 'style-loader!css-loader',
+				include: path.join(__dirname, 'src')
+			},
+			{
+				test: /\.sass$/,
+				loader: 'style-loader!css-loader!sass-loader',
+				include: path.join(__dirname, 'src')
+			},
+			{ 
+				test: /\.(png|jpg)$/, 
+				loader: 'url-loader?limit=8192' // 當圖片大小小於 8k 時使用 base64 URL, 其餘使用直接連接到圖片的 URL
+			} 
+      		
+
 		]
 	},
 	// devServer 則是 webpack-dev-server 設定
@@ -31,6 +47,7 @@ module.exports = {
 		inline: true,
 		progress: true
 	},
+	devtool: 'sourcemap',
 	// plugins 放置所使用的外掛
 	plugins:[]
 };

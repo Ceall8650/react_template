@@ -1,12 +1,14 @@
+require('../Styles/header.sass')
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-class Header extends React.Component{
+export class Header extends React.Component{
 	render() {
 		return (
-			<div>This is Header</div>
+			<header>This is Header</header>
 		)
 	}
 }
 
-export default Header;
+// export default Header ;

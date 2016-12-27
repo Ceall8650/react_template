@@ -1,0 +1,36 @@
+.areaList
+	.areaContainer
+		width: calc(90%/7)
+		min-width: 125px 
+		display: inline-block
+		height: 500px
+		margin: calc(10%/12)
+		display: inline-flex;
+		-webkit-justify-content: center 
+		justify-content: center 
+		-webkit-align-items: flex-end 
+		align-items: flex-end 
+		.areaName
+			width: 100%
+			height: 70px
+			display: flex
+			-webkit-align-items: center 
+			align-items: center 
+			-webkit-justify-content: center 
+			justify-content: center 
+			background: linear-gradient(transparent, #000) 
+			background: #000; /* For browsers that do not support gradients */
+			background: -webkit-linear-gradient(rgba(255,0,0,0),rgba(0,0,0,1)); /*Safari 5.1-6*/
+			background: -o-linear-gradient(rgba(255,0,0,0),rgba(0,0,0,1)); /*Opera 11.1-12*/
+			background: -moz-linear-gradient(rgba(255,0,0,0),rgba(0,0,0,1)); /*Fx 3.6-15*/
+			background: linear-gradient(rgba(255,0,0,0), rgba(0,0,0,1)); /*Standard*/
+			color: #fff
+		&:first-child
+			margin-left: 0px 
+		&:last-child
+			margin-right: 0px 
+
+@media screen and (min-height: 990px)
+	.areaList
+		.areaContainer
+			height: 700px

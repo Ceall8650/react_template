@@ -18,7 +18,6 @@ module.exports = {
     // output 是放入產生出來的結果的相關參數
 	output: {
 		path: `${__dirname}/build`, // 編譯後的檔案放在這個目錄
-		publicPath: `/res/`,
 		filename: '[name]_bundle.js'
 	},
 	module:{

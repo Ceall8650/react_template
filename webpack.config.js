@@ -1,10 +1,14 @@
 var webpack = require('webpack');
 var path = require('path');
+var ExtractTextPlugin = require("extract-text-webpack-plugin");
 var definePlugin = new webpack.DefinePlugin({
   __DEV__: JSON.stringify(JSON.parse(process.env.BUILD_DEV || 'true')),
   __PRERELEASE__: JSON.stringify(JSON.parse(process.env.BUILD_PRERELEASE || 'false'))
 })
-var commonsPlugin = new webpack.optimize.CommonsChunkPlugin('common.js'); //優化通用的程式碼, 擷取將共用的元件與樣式, 統一放入同一個檔案, 該檔案不需重新載入, 可直接被快取
+var commonsPlugin = new webpack.optimize.CommonsChunkPlugin( 'common.js', ['main']); //優化通用的程式碼, 擷取將共用的元件與樣式, 統一放入同一個檔案, 該檔案不需重新載入, 可直接被快取
+var vendorsPlugin = new webpack.optimize.CommonsChunkPlugin( 'vendor.js', ['vendors']); //優化通用的程式碼, 擷取將共用的元件與樣式, 統一放入同一個檔案, 該檔案不需重新載入, 可直接被快取
+var extractCss = new ExtractTextPlugin('src/Styles/[name].css');
+// var extractSass = new ExtractTextPlugin('src/Styles/[name].sass');
 
 module.exports = {
 	// 檔案起始點從 entry 進入，因為是陣列所以也可以是多個檔案
@@ -13,7 +17,8 @@ module.exports = {
 		    'webpack-dev-server/client?http://127.0.0.1:8080',  // WebpackDevServer host and port
 	    	'webpack/hot/only-dev-server',  //"only" 可以避免在語法錯誤時重新載入
 	    	`${__dirname}/src/index.js` // Your appʼs entry point
-		]
+		],
+		vendors: ['jquery', 'owl.carousel']
 	},
     // output 是放入產生出來的結果的相關參數
 	output: {
@@ -31,7 +36,7 @@ module.exports = {
 			},
 			{
 				test: /\.css$/,
-				loader: 'style-loader!css-loader',
+				loader: ExtractTextPlugin.extract('style-loader!css-loader'),
 				include: path.join(__dirname, 'src')
 			},
 			{
@@ -41,13 +46,15 @@ module.exports = {
 			},
 			{ 
 				test: /\.(png|jpg)$/, 
-				loader: 'url-loader?limit=8192', /// 當檔案小於 8K 的時候會產生 base64 格式的 dataURI 超過的話則直接帶連結
-				include: path.join(__dirname, 'res')
+				loader: 'url-loader?limit=8192' /// 當檔案小於 8K 的時候會產生 base64 格式的 dataURI 超過的話則直接帶連結
 			} 
 		]
 	},
 	resolve: {
-		extensions: ['', '.js', '.json', '.sass', '.css']
+		extensions: ['', '.js', '.json', '.sass', '.css', 'png'],
+		alias: {
+            scrollme : `${__dirname}/vendor/jquery.scrollme.js`,//后续直接 require('scrollme') 即可
+        }
 	},
 	// // devServer 則是 webpack-dev-server 設定
 	// devServer:{
@@ -58,5 +65,15 @@ module.exports = {
 	// },
 	devtool: 'sourcemap',
 	// plugins 放置所使用的外掛
-	plugins:[definePlugin, commonsPlugin]
+	plugins:[
+		definePlugin, 
+		commonsPlugin,
+		new webpack.ProvidePlugin({
+		    $: "jquery",
+		    jQuery: "jquery",
+		    "window.jQuery": "jquery"
+	    }),
+		vendorsPlugin,
+		extractCss
+	]
 };
